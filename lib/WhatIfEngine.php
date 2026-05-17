@@ -2,7 +2,7 @@
 
 class WhatIfEngine
 {
-    public function calcularSinJugador(int $jugadorId): array
+    public function calcularSinJugador(int $jugadorId, string $modo = 'ambos'): array
     {
         //1.Obtener jugador
         $jugador = Doctrine_Core::getTable('Jugador')->find($jugadorId);
@@ -23,10 +23,30 @@ class WhatIfEngine
 
         //3.Goles del jugador agrupados por partido
         $eventos = EventoPartidoTable::getInstance()->findGolesPorJugadorEnPartidos($jugadorId, $partidoIds);
-        $golesPorPartido = [];
+        $golesPropiosPorPartido = [];
         foreach ($eventos as $e) {
-            $golesPorPartido[$e->partido_id] = ($golesPorPartido[$e->partido_id] ?? 0) + 1;
+            $golesPropiosPorPartido[$e->partido_id] = ($golesPropiosPorPartido[$e->partido_id] ?? 0) + 1;
         }
+
+        //3b.Goles asistidos por el jugador en todos los partidos de la temporada
+        $eventosAsistidos = EventoPartidoTable::getInstance()->findGolesPorAsistente($jugadorId);
+        $golesAsistidosPorPartido = [];
+        foreach ($eventosAsistidos as $e) {
+            $golesAsistidosPorPartido[$e->partido_id] = ($golesAsistidosPorPartido[$e->partido_id] ?? 0) + 1;
+        }
+
+        // Fusionar según el modo seleccionado
+        $golesPorPartido = [];
+        if ($modo === 'goles') {
+            $golesPorPartido = $golesPropiosPorPartido;
+        } elseif ($modo === 'asistencias') {
+            $golesPorPartido = $golesAsistidosPorPartido;
+        } else {
+            foreach (array_unique(array_merge(array_keys($golesPropiosPorPartido), array_keys($golesAsistidosPorPartido))) as $pid) {
+                $golesPorPartido[$pid] = ($golesPropiosPorPartido[$pid] ?? 0) + ($golesAsistidosPorPartido[$pid] ?? 0);
+            }
+        }
+
 
         //4.Todos los partidos de la temporada
         $todosPartidos = PartidoTable::getInstance()->findTodos();
@@ -46,6 +66,7 @@ class WhatIfEngine
             $nuevaLocal = $partido->goles_local;
             $nuevaVisitante = $partido->goles_visitante;
 
+
             if ($golesQuitados > 0) {
                 if ($localId === $jugador->equipo_id) {
                     $nuevaLocal = max(0, $partido->goles_local - $golesQuitados);
@@ -57,13 +78,28 @@ class WhatIfEngine
                 $resultadoNuevo = $nuevaLocal <=> $nuevaVisitante;
 
                 if ($resultadoOrig !== $resultadoNuevo) {
+                    $tieneGoles      = isset($golesPropiosPorPartido[$partido->id]);
+                    $tieneAsistencias = isset($golesAsistidosPorPartido[$partido->id]);
+                    $motivo = ($tieneGoles && $tieneAsistencias) ? 'ambos' : ($tieneGoles ? 'goles' : 'asistencias');
+
+                    $esLocal = ($localId === $jugador->equipo_id);
+                    $puntosOrig  = $esLocal
+                        ? $this->puntosParaEquipo($partido->goles_local, $partido->goles_visitante)
+                        : $this->puntosParaEquipo($partido->goles_visitante, $partido->goles_local);
+                    $puntosNuevo = $esLocal
+                        ? $this->puntosParaEquipo($nuevaLocal, $nuevaVisitante)
+                        : $this->puntosParaEquipo($nuevaVisitante, $nuevaLocal);
+
                     $partidosAfectados[] = [
-                        'jornada' => $partido->jornada,
-                        'local' => $partido->EquipoLocal->nombre_corto,
-                        'visitante' => $partido->EquipoVisitante->nombre_corto,
-                        'resultado_orig' => $partido->goles_local . '-' . $partido->goles_visitante,
+                        'jornada'         => $partido->jornada,
+                        'local'           => $partido->EquipoLocal->nombre_corto,
+                        'visitante'       => $partido->EquipoVisitante->nombre_corto,
+                        'resultado_orig'  => $partido->goles_local . '-' . $partido->goles_visitante,
                         'resultado_nuevo' => $nuevaLocal . '-' . $nuevaVisitante,
-                        'goles_quitados' => $golesQuitados,
+                        'goles_quitados'  => $golesQuitados,
+                        'motivo'          => $motivo,
+                        'puntos_orig'     => $puntosOrig,
+                        'puntos_nuevo'    => $puntosNuevo,
                     ];
                 }
             }
@@ -121,7 +157,8 @@ class WhatIfEngine
         return [
             'jugador' => $jugador->nombre,
             'equipo' => $jugador->Equipo->nombre,
-            'total_goles' => array_sum($golesPorPartido),
+            'total_goles' => count($eventos),
+            'total_asistencias' => count($eventosAsistidos),
             'partidos_jugados' => count($alineaciones),
             'original' => $original,
             'nueva' => $nuevaClasificacion,
@@ -141,6 +178,13 @@ class WhatIfEngine
             'gf' => 0,
             'gc' => 0,
         ];
+    }
+
+    private function puntosParaEquipo(int $gf, int $gc): int
+    {
+        if ($gf > $gc) return 3;
+        if ($gf === $gc) return 1;
+        return 0;
     }
 
     private function actualizarContador(array &$c, int $golesFavor, int $golesContra)

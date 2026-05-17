@@ -15,4 +15,21 @@ class EventoPartidoTable extends Doctrine_Table
             ->andWhereIn('e.partido_id', $partidoIds)
             ->execute();
     }
+
+    public function findGolesPorAsistenteEnPartidos(int $jugadorId, array $partidoIds)
+    {
+        return $this->createQuery('e')
+            ->where('e.asistente_id = ?', $jugadorId)
+            ->andWhere('e.tipo_evento = ?', 'goal')
+            ->andWhereIn('e.partido_id', $partidoIds)
+            ->execute();
+    }
+
+    public function findGolesPorAsistente(int $jugadorId)
+    {
+        return $this->createQuery('e')
+            ->where('e.asistente_id = ?', $jugadorId)
+            ->andWhere('e.tipo_evento = ?', 'goal')
+            ->execute();
+    }
 }

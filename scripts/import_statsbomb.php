@@ -51,7 +51,7 @@ $jugadoresInsertados = [];
 $stmtPartido   = $pdo->prepare('INSERT INTO partidos (id, equipo_local_id, equipo_visitante_id, goles_local, goles_visitante, fecha, jornada) VALUES (?, ?, ?, ?, ?, ?, ?)');
 $stmtJugador   = $pdo->prepare('INSERT INTO jugadores (id, nombre, equipo_id, dorsal) VALUES (?, ?, ?, ?)');
 $stmtAlineacion = $pdo->prepare('INSERT INTO alineaciones (partido_id, jugador_id, equipo_id) VALUES (?, ?, ?)');
-$stmtEvento    = $pdo->prepare('INSERT INTO eventos_partido (partido_id, jugador_id, equipo_id, tipo_evento, minuto) VALUES (?, ?, ?, ?, ?)');
+$stmtEvento    = $pdo->prepare('INSERT INTO eventos_partido (partido_id, jugador_id, asistente_id, equipo_id, tipo_evento, minuto) VALUES (?, ?, ?, ?, ?, ?)');
 
 foreach ($partidos as $p) {
     $matchId   = $p['match_id'];
@@ -93,13 +93,25 @@ foreach ($partidos as $p) {
     $eventsFile = "{$statsbombPath}/events/{$matchId}.json";
     $eventos = json_decode(file_get_contents($eventsFile), true);
 
+    $eventosById = [];
+    foreach ($eventos as $e) {
+        $eventosById[$e['id']] = $e;
+    }
+
     foreach ($eventos as $e) {
         if ($e['type']['name'] !== 'Shot') continue;
         if (($e['shot']['outcome']['name'] ?? '') !== 'Goal') continue;
 
+        $asistenteId = null;
+        $keyPassId = $e['shot']['key_pass_id'] ?? null;
+        if ($keyPassId && isset($eventosById[$keyPassId])) {
+            $asistenteId = $eventosById[$keyPassId]['player']['id'];
+        }
+
         $stmtEvento->execute([
             $matchId,
             $e['player']['id'],
+            $asistenteId,
             $e['team']['id'],
             'goal',
             $e['minute'],

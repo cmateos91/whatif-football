@@ -29,16 +29,18 @@ CREATE TABLE IF NOT EXISTS partidos (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 CREATE TABLE IF NOT EXISTS eventos_partido (
-    id INT AUTO_INCREMENT PRIMARY KEY,
-    partido_id INT NOT NULL,
-    jugador_id INT,
-    equipo_id INT NOT NULL,
-    tipo_evento VARCHAR(20) NOT NULL COMMENT 'gol, penalty, gol en propia',
-    minuto INT NOT NULL,
-    FOREIGN KEY (partido_id) REFERENCES partidos(id),
-    FOREIGN KEY (jugador_id) REFERENCES jugadores(id),
-    FOREIGN KEY (equipo_id) REFERENCES equipos(id)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+      id INT AUTO_INCREMENT PRIMARY KEY,
+      partido_id INT NOT NULL,
+      jugador_id INT,
+      asistente_id INT,
+      equipo_id INT NOT NULL,
+      tipo_evento VARCHAR(20) NOT NULL COMMENT 'gol, penalty, gol en propia',
+      minuto INT NOT NULL,
+      FOREIGN KEY (partido_id) REFERENCES partidos(id),
+      FOREIGN KEY (jugador_id) REFERENCES jugadores(id),
+      FOREIGN KEY (asistente_id) REFERENCES jugadores(id),
+      FOREIGN KEY (equipo_id) REFERENCES equipos(id)
+  ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 CREATE TABLE IF NOT EXISTS alineaciones (
     id INT AUTO_INCREMENT PRIMARY KEY,
