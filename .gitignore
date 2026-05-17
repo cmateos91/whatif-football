@@ -1,0 +1,10 @@
+environment.php
+enviroment.php
+smarty/templates_c/*
+!smarty/templates_c/.gitkeep
+*.log
+.DS_Store
+/tmp/
+sqlite.db
+scripts/test_doctrine.php
+scripts/migrate_from_sqlite.php
