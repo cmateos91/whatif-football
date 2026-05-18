@@ -61,8 +61,8 @@ class JuegosController extends ApplicationController
             $resultado1 = $engine->calcularSinJugador($jugador1Id, 'ambos');
             $resultado2 = $engine->calcularSinJugador($jugador2Id, 'ambos');
 
-            $pts1 = array_sum(array_map(fn($p) => $p['puntos_orig'] - $p['puntos_nuevo'], $resultado1['partidos_afectados']));
-            $pts2 = array_sum(array_map(fn($p) => $p['puntos_orig'] - $p['puntos_nuevo'], $resultado2['partidos_afectados']));
+            $pts1 = array_sum(array_map(function ($p) { return $p['puntos_orig'] - $p['puntos_nuevo']; }, $resultado1['partidos_afectados']));
+            $pts2 = array_sum(array_map(function ($p) { return $p['puntos_orig'] - $p['puntos_nuevo']; }, $resultado2['partidos_afectados']));
 
             header('Content-Type: application/json');
             echo json_encode([
