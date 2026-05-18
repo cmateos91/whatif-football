@@ -189,16 +189,23 @@ $(document).ready(function () {
     }
 
     function renderPar(res) {
-        var html = '<div class="row g-4 mb-4">';
-        html += tarjetaJugadorInf(res.jugador1, 1);
-        html += '<div class="col-12 col-md-2 d-flex align-items-center justify-content-center"><span class="fs-2 fw-bold text-secondary">VS</span></div>';
-        html += tarjetaJugadorInf(res.jugador2, 2);
+        var html = '<div class="row g-3 mb-3">';
+        html += '<div class="col-5">'
+            + '<button class="inf-voto btn btn-outline-dark w-100 h-100 py-4 text-start" data-voto="1">'
+            + '<div class="fs-5 fw-bold">' + res.jugador1.nombre + '</div>'
+            + '<div class="text-muted small mt-1">' + res.jugador1.equipo + '</div>'
+            + '</button></div>';
+        html += '<div class="col-2 d-flex align-items-center justify-content-center">'
+            + '<span class="fs-3 fw-bold text-secondary">VS</span></div>';
+        html += '<div class="col-5">'
+            + '<button class="inf-voto btn btn-outline-dark w-100 h-100 py-4 text-start" data-voto="2">'
+            + '<div class="fs-5 fw-bold">' + res.jugador2.nombre + '</div>'
+            + '<div class="text-muted small mt-1">' + res.jugador2.equipo + '</div>'
+            + '</button></div>';
         html += '</div>';
-        html += '<div class="d-flex justify-content-center gap-3">';
-        html += '<button class="btn btn-outline-primary btn-lg px-4 inf-voto" data-voto="1"><i class="bi bi-hand-index-thumb me-1"></i>' + res.jugador1.nombre.split(' ')[0] + '</button>';
-        html += '<button class="btn btn-outline-secondary btn-lg px-4 inf-voto" data-voto="0"><i class="bi bi-dash-circle me-1"></i>Empate</button>';
-        html += '<button class="btn btn-outline-primary btn-lg px-4 inf-voto" data-voto="2"><i class="bi bi-hand-index-thumb me-1"></i>' + res.jugador2.nombre.split(' ')[0] + '</button>';
-        html += '</div>';
+        html += '<div class="text-center">'
+            + '<button class="inf-voto btn btn-outline-secondary btn-sm px-4" data-voto="0">'
+            + '<i class="bi bi-dash-circle me-1"></i>Empate</button></div>';
         $('#inf-par').html(html);
     }
 
@@ -212,10 +219,16 @@ $(document).ready(function () {
 
         $('.inf-voto').prop('disabled', true);
 
-        var feedback = acertado
-            ? '<div class="alert alert-success text-center fw-bold mt-3"><i class="bi bi-check-circle me-2"></i>¡Correcto!</div>'
-            : '<div class="alert alert-danger text-center fw-bold mt-3"><i class="bi bi-x-circle me-2"></i>Incorrecto — ' + textoGanador(ganador, inf.currentPar.jugador1.nombre, inf.currentPar.jugador2.nombre) + '</div>';
-        $('#inf-par').append(feedback);
+        var j1 = inf.currentPar.jugador1, j2 = inf.currentPar.jugador2;
+        var feedback = '<div class="alert ' + (acertado ? 'alert-success' : 'alert-danger') + ' text-center fw-bold mt-3">'
+            + (acertado ? '<i class="bi bi-check-circle me-2"></i>¡Correcto!' : '<i class="bi bi-x-circle me-2"></i>¡Incorrecto!')
+            + ' — ' + textoGanador(ganador, j1.nombre, j2.nombre) + '</div>';
+        feedback += '<div class="row g-2 mt-1 text-center">';
+        feedback += revelacion(j1, ganador === 1, ganador === 0);
+        feedback += '<div class="col-2 d-flex align-items-center justify-content-center text-secondary fw-bold">VS</div>';
+        feedback += revelacion(j2, ganador === 2, ganador === 0);
+        feedback += '</div>';
+        $('#inf-par').html(feedback);
 
         if (acertado) {
             inf.aciertos++;
@@ -362,6 +375,21 @@ $(document).ready(function () {
         html += '<div class="text-muted small">aportados a su equipo</div></div>';
         html += '</div></div></div>';
         return html;
+    }
+
+    function revelacion(j, esGanador, esEmpate) {
+        var color = esGanador ? 'success' : (esEmpate ? 'secondary' : 'danger');
+        return '<div class="col-5">'
+            + '<div class="card border-' + color + ' border-2 h-100">'
+            + '<div class="card-body py-2 px-3">'
+            + '<div class="fw-bold">' + j.nombre + '</div>'
+            + '<div class="text-muted small">' + j.equipo + '</div>'
+            + '<div class="mt-2 small">'
+            + '<i class="bi bi-dribbble me-1"></i>' + j.goles + ' goles &nbsp;'
+            + '<i class="bi bi-arrow-up-right-circle me-1"></i>' + j.asistencias + ' asist.'
+            + '</div>'
+            + '<div class="fw-bold fs-5 text-' + color + '">' + (j.pts_aportados > 0 ? '+' : '') + j.pts_aportados + ' pts</div>'
+            + '</div></div></div>';
     }
 
     function tarjetaJugadorInf(j, num) {
