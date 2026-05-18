@@ -3,7 +3,7 @@
     position: relative;
 }
 
-#autocomplete-list {
+#autocomplete-list, .autocomplete-list {
     display: none;
     position: absolute;
     top: 100%;

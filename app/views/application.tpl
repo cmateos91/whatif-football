@@ -10,14 +10,7 @@
 </head>
 <body class="bg-light">
 
-    <nav class="navbar navbar-dark bg-dark mb-4">
-        <div class="container">
-            <span class="navbar-brand fw-bold">
-                <i class="bi bi-trophy-fill text-warning me-2"></i>WhatIF Football
-            </span>
-            <span class="text-secondary small">Datos reales de StatsBomb</span>
-        </div>
-    </nav>
+    {include file="_navbar.tpl"}
 
     <div class="container">
         {include file=$content_template}
@@ -26,5 +19,6 @@
     <script src="/public/vendor/jquery.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
     <script src="/public/js/app.js"></script>
+    {if isset($extra_js)}<script src="{$extra_js}"></script>{/if}
 </body>
 </html>

@@ -40,6 +40,7 @@ class MainController extends ApplicationController
             'temporadas'           => $temporadas,
             'liga_actual_id'       => $temporadaActual->liga_id,
             'temporada_actual_id'  => $_SESSION['temporada_id'],
+            'current_page'         => 'home',
         ]);
     }
 
