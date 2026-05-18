@@ -18,11 +18,27 @@ $(document).ready(function () {
             }
         });
     });
+    // Sync select ↔ autocomplete
+    $('#player-select-ui').on('change', function () {
+        var selectedId = $(this).val();
+        if (!selectedId) {
+            $('#player-search').val('');
+            $('#player-select').val('');
+            return;
+        }
+        var jugador = jugadores.find(function (j) { return j.id == selectedId; });
+        if (jugador) {
+            $('#player-search').val(jugador.nombre);
+            $('#player-select').val(jugador.id);
+        }
+    });
+
     $('#player-search').on('input', function () {
         var texto = $(this).val().toLowerCase().trim();
         var $list = $('#autocomplete-list');
         $list.empty();
 
+        // Clear select if text changed
         if (texto.length < 2) {
             $list.hide();
             return;
@@ -43,6 +59,7 @@ $(document).ready(function () {
                 .on('click', function () {
                     $('#player-search').val(j.nombre);
                     $('#player-select').val(j.id);
+                    $('#player-select-ui').val(j.id);
                     $list.hide();
                 });
             $list.append($item);

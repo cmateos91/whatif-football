@@ -44,18 +44,34 @@
                 <p class="text-muted mb-4">Elige un jugador y descubre cómo habría cambiado la clasificación sin su aportación.</p>
 
                 <form id="scenario-form">
+                    {* Selector agrupado por equipos *}
+                    <div class="mb-3">
+                        <label for="player-select-ui" class="form-label fw-semibold">
+                            <i class="bi bi-people-fill me-1"></i>Jugador
+                        </label>
+                        <select id="player-select-ui" class="form-select">
+                            <option value="">— Selecciona un jugador —</option>
+                            {foreach $jugadores_por_equipo as $equipo => $jugadores}
+                                <optgroup label="{$equipo}">
+                                    {foreach $jugadores as $j}
+                                        <option value="{$j->id}">{$j->nombre}</option>
+                                    {/foreach}
+                                </optgroup>
+                            {/foreach}
+                        </select>
+                    </div>
+
+                    {* Buscador rápido *}
+                    <div class="mb-3">
+                        <div class="autocomplete-wrapper">
+                            <input type="text" id="player-search" class="form-control" placeholder="O busca por nombre..." autocomplete="off">
+                            <input type="hidden" id="player-select" name="player_id">
+                            <div id="autocomplete-list"></div>
+                        </div>
+                    </div>
+
                     <div class="row g-3 align-items-end">
                         <div class="col-md-5">
-                            <label for="player-search" class="form-label fw-semibold">
-                                <i class="bi bi-person-fill me-1"></i>Jugador
-                            </label>
-                            <div class="autocomplete-wrapper">
-                                <input type="text" id="player-search" class="form-control" placeholder="Escribe un nombre..." autocomplete="off">
-                                <input type="hidden" id="player-select" name="player_id">
-                                <div id="autocomplete-list"></div>
-                            </div>
-                        </div>
-                        <div class="col-md-4">
                             <label for="modo-select" class="form-label fw-semibold">
                                 <i class="bi bi-sliders me-1"></i>Descontar
                             </label>
@@ -65,7 +81,7 @@
                                 <option value="asistencias">Solo asistencias</option>
                             </select>
                         </div>
-                        <div class="col-md-3">
+                        <div class="col-md-4">
                             <button type="submit" id="btn-calcular" class="btn btn-dark w-100">
                                 <i class="bi bi-play-fill me-1"></i>Calcular
                             </button>

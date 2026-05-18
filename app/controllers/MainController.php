@@ -23,7 +23,7 @@ class MainController extends ApplicationController
         );
         $temporadas = $stmtTemporadas->fetchAll(PDO::FETCH_OBJ);
 
-        $jugadores = JugadorTable::getInstance()->findConGoles();
+        $jugadores = JugadorTable::getInstance()->findConGolesOAsistencias();
 
         $porEquipo = [];
         foreach ($jugadores as $j) {

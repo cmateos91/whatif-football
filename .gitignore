@@ -8,3 +8,4 @@ smarty/templates_c/*
 sqlite.db
 scripts/test_doctrine.php
 scripts/migrate_from_sqlite.php
+apisportmonks.txt
