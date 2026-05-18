@@ -49,3 +49,16 @@
 .error {
     color: #dc3545;
 }
+
+/* Tarjetas de voto modo infinito */
+.btn-voto-jugador {
+    background: white;
+    border: 1px solid #dee2e6;
+    transition: background 0.15s, border-color 0.15s;
+}
+
+.btn-voto-jugador:hover {
+    background: #f0f4ff;
+    border-color: #6c8ebf;
+    color: inherit;
+}

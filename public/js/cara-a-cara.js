@@ -191,14 +191,14 @@ $(document).ready(function () {
     function renderPar(res) {
         var html = '<div class="row g-3 mb-3">';
         html += '<div class="col-5">'
-            + '<button class="inf-voto btn btn-outline-dark w-100 h-100 py-4 text-start" data-voto="1">'
+            + '<button class="inf-voto btn btn-voto-jugador w-100 h-100 py-4 text-start" data-voto="1">'
             + '<div class="fs-5 fw-bold">' + res.jugador1.nombre + '</div>'
             + '<div class="text-muted small mt-1">' + res.jugador1.equipo + '</div>'
             + '</button></div>';
         html += '<div class="col-2 d-flex align-items-center justify-content-center">'
             + '<span class="fs-3 fw-bold text-secondary">VS</span></div>';
         html += '<div class="col-5">'
-            + '<button class="inf-voto btn btn-outline-dark w-100 h-100 py-4 text-start" data-voto="2">'
+            + '<button class="inf-voto btn btn-voto-jugador w-100 h-100 py-4 text-start" data-voto="2">'
             + '<div class="fs-5 fw-bold">' + res.jugador2.nombre + '</div>'
             + '<div class="text-muted small mt-1">' + res.jugador2.equipo + '</div>'
             + '</button></div>';
