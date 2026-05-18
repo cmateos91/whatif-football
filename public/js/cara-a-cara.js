@@ -145,6 +145,17 @@ $(document).ready(function () {
     $('#btn-play').on('click', iniciarInfinito);
     $('#btn-rendirse').on('click', function () { gameOver(true); });
 
+    $('#btn-ranking-inicio').on('click', function () {
+        var $r = $('#ranking-inicio');
+        $r.toggleClass('d-none');
+        if (!$r.hasClass('d-none')) {
+            $(this).html('<i class="bi bi-trophy me-1"></i>Ocultar ranking');
+            cargarClasificacionEn('#ranking-inicio');
+        } else {
+            $(this).html('<i class="bi bi-trophy me-1"></i>Ranking');
+        }
+    });
+
     function iniciarInfinito() {
         inf.active = true;
         inf.aciertos = 0;
@@ -333,13 +344,17 @@ $(document).ready(function () {
     });
 
     function cargarClasificacion() {
+        cargarClasificacionEn('#ranking-container');
+    }
+
+    function cargarClasificacionEn(selector) {
         $.ajax({
             url: '/juegos/clasificacion',
             method: 'GET',
             dataType: 'json',
             success: function (res) {
                 if (!res.ok || !res.clasificacion.length) {
-                    $('#ranking-container').html('<p class="text-muted text-center">Aún no hay puntuaciones guardadas.</p>');
+                    $(selector).html('<p class="text-muted text-center">Aún no hay puntuaciones guardadas.</p>');
                     return;
                 }
                 var html = '<h6 class="fw-bold mb-3"><i class="bi bi-trophy-fill text-warning me-1"></i>Top 10</h6>';
@@ -358,7 +373,7 @@ $(document).ready(function () {
                     html += '</tr>';
                 });
                 html += '</tbody></table>';
-                $('#ranking-container').html(html);
+                $(selector).html(html);
             }
         });
     }

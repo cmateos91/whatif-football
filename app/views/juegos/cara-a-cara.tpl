@@ -109,9 +109,15 @@
                             <i class="bi bi-infinity display-1 text-dark mb-3 d-block"></i>
                             <h4>Modo Infinito</h4>
                             <p class="text-muted mb-4">Se irán cargando pares de jugadores al azar. Vota quién crees que aportó más puntos.<br>El juego termina cuando falles. ¿Cuántas aciertas seguidas?</p>
-                            <button id="btn-play" class="btn btn-dark btn-lg px-5">
-                                <i class="bi bi-play-fill me-1"></i>Jugar
-                            </button>
+                            <div class="d-flex justify-content-center gap-2">
+                                <button id="btn-play" class="btn btn-dark btn-lg px-5">
+                                    <i class="bi bi-play-fill me-1"></i>Jugar
+                                </button>
+                                <button id="btn-ranking-inicio" class="btn btn-outline-dark btn-lg px-4">
+                                    <i class="bi bi-trophy me-1"></i>Ranking
+                                </button>
+                            </div>
+                            <div id="ranking-inicio" class="mt-4 d-none text-start"></div>
                         </div>
 
                         {* Pantalla de juego *}
