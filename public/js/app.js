@@ -38,7 +38,10 @@ $(document).ready(function () {
         var $list = $('#autocomplete-list');
         $list.empty();
 
-        // Clear select if text changed
+        // Al escribir, reseteamos ambos inputs hasta que haga click en un resultado
+        $('#player-select').val('');
+        $('#player-select-ui').val('');
+
         if (texto.length < 2) {
             $list.hide();
             return;
