@@ -39,4 +39,7 @@ Doctrine_Manager::connection(
     'temporada'
 );
 
-Doctrine_Core::loadModels(__DIR__ . '/app/models');
+Doctrine_Core::loadModels([
+    __DIR__ . '/app/models/generated',
+    __DIR__ . '/app/models',
+]);
