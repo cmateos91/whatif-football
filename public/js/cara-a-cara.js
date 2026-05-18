@@ -287,7 +287,14 @@ $(document).ready(function () {
 
     $(document).on('click', '#btn-guardar', function () {
         var nombre = $('#input-nombre').val().trim();
-        if (!nombre) return;
+        if (nombre.length < 2) {
+            $('#msg-guardado').html('<div class="text-danger small">Mínimo 2 caracteres.</div>');
+            return;
+        }
+        if (!/^[\w\s\-\.À-ÿ]+$/.test(nombre)) {
+            $('#msg-guardado').html('<div class="text-danger small">Solo letras, números, espacios y guiones.</div>');
+            return;
+        }
 
         $(this).prop('disabled', true);
 
@@ -300,6 +307,9 @@ $(document).ready(function () {
                 if (res.ok) {
                     $('#zona-nombre').html('<div class="alert alert-success"><i class="bi bi-check-circle me-1"></i>¡Puntuación guardada!</div>');
                     cargarClasificacion();
+                } else {
+                    $('#msg-guardado').html('<div class="text-danger small">' + res.error + '</div>');
+                    $('#btn-guardar').prop('disabled', false);
                 }
             }
         });

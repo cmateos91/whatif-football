@@ -122,12 +122,22 @@ class JuegosController extends ApplicationController
         $tiempo    = isset($_POST['tiempo_segundos']) ? (int) $_POST['tiempo_segundos'] : 0;
         $temporada = $_SESSION['temporada_id'];
 
-        if ($nombre === '' || $aciertos < 1) {
-            echo json_encode(['ok' => false, 'error' => 'Datos inválidos']);
+        $nombre = mb_substr($nombre, 0, 30);
+
+        if (mb_strlen($nombre) < 2) {
+            echo json_encode(['ok' => false, 'error' => 'El nombre debe tener al menos 2 caracteres']);
             return;
         }
 
-        $nombre = mb_substr($nombre, 0, 100);
+        if (!preg_match('/^[\p{L}\p{N} _\-\.]+$/u', $nombre)) {
+            echo json_encode(['ok' => false, 'error' => 'El nombre solo puede contener letras, números, espacios y guiones']);
+            return;
+        }
+
+        if ($aciertos < 1 || $aciertos > 10000 || $tiempo < 1 || $tiempo > 86400) {
+            echo json_encode(['ok' => false, 'error' => 'Datos inválidos']);
+            return;
+        }
 
         $conn = Doctrine_Manager::getInstance()->getConnection('master');
         $conn->execute(
