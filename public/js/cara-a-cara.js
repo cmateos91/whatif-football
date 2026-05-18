@@ -242,44 +242,45 @@ $(document).ready(function () {
         }
     });
 
+
     function gameOver(rendido) {
         clearInterval(inf.timerInterval);
         inf.active = false;
 
-        $('#inf-juego').addClass('d-none');
-
-        var html = '<div class="text-center py-3">';
-        if (rendido) {
-            html += '<h4 class="mb-1"><i class="bi bi-flag text-secondary me-2"></i>Partida terminada</h4>';
-        } else {
-            html += '<h4 class="text-danger mb-1"><i class="bi bi-x-circle me-2"></i>¡Fallaste!</h4>';
-        }
-
         var m = Math.floor(inf.segundos / 60), s = inf.segundos % 60;
         var tiempoStr = (m < 10 ? '0' : '') + m + ':' + (s < 10 ? '0' : '') + s;
 
-        html += '<div class="d-flex justify-content-center gap-4 my-3">';
+        // Ocultar botón rendirse, dejar el timer y aciertos visibles
+        $('#btn-rendirse').addClass('d-none');
+
+        var html = '<hr class="my-3">';
+        html += '<div class="text-center mb-3">';
+        if (rendido) {
+            html += '<h5><i class="bi bi-flag text-secondary me-2"></i>Partida terminada</h5>';
+        } else {
+            html += '<h5 class="text-danger"><i class="bi bi-x-circle me-2"></i>¡Fallaste!</h5>';
+        }
+        html += '<div class="d-flex justify-content-center gap-5 my-3">';
         html += '<div><span class="display-6 fw-bold">' + inf.aciertos + '</span><div class="text-muted small">aciertos</div></div>';
         html += '<div><span class="display-6 fw-bold font-monospace">' + tiempoStr + '</span><div class="text-muted small">tiempo</div></div>';
         html += '</div>';
 
         if (inf.aciertos > 0) {
-            html += '<div id="zona-nombre" class="mt-3">';
-            html += '<p class="text-muted">¿Quieres guardar tu puntuación?</p>';
+            html += '<div id="zona-nombre" class="mb-3">';
+            html += '<p class="text-muted mb-2">¿Quieres guardar tu puntuación?</p>';
             html += '<div class="d-flex justify-content-center gap-2">';
             html += '<input type="text" id="input-nombre" class="form-control w-auto" placeholder="Tu nombre" maxlength="30" style="max-width:200px">';
             html += '<button id="btn-guardar" class="btn btn-dark">Guardar</button>';
-            html += '</div>';
-            html += '<div id="msg-guardado" class="mt-2"></div>';
+            html += '</div><div id="msg-guardado" class="mt-2"></div>';
             html += '</div>';
         }
 
-        html += '<button id="btn-rejugar" class="btn btn-outline-dark mt-3 me-2"><i class="bi bi-arrow-clockwise me-1"></i>Volver a jugar</button>';
-        html += '<button id="btn-ver-ranking" class="btn btn-dark mt-3"><i class="bi bi-trophy me-1"></i>Ver ranking</button>';
+        html += '<button id="btn-rejugar" class="btn btn-outline-dark me-2"><i class="bi bi-arrow-clockwise me-1"></i>Volver a jugar</button>';
+        html += '<button id="btn-ver-ranking" class="btn btn-dark"><i class="bi bi-trophy me-1"></i>Ver ranking</button>';
         html += '</div>';
         html += '<div id="ranking-container" class="mt-3"></div>';
 
-        $('#inf-gameover').html(html).removeClass('d-none');
+        $('#inf-par').append(html);
 
         cargarClasificacion();
     }
@@ -305,7 +306,8 @@ $(document).ready(function () {
     });
 
     $(document).on('click', '#btn-rejugar', function () {
-        $('#inf-gameover').addClass('d-none').html('');
+        $('#inf-juego').addClass('d-none');
+        $('#btn-rendirse').removeClass('d-none');
         $('#inf-inicio').removeClass('d-none');
     });
 
