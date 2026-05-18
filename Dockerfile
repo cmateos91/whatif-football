@@ -2,6 +2,8 @@ FROM php:7.4-apache
 
 RUN docker-php-ext-install pdo pdo_mysql mysqli
 
+RUN echo "error_reporting = E_ALL & ~E_DEPRECATED & ~E_NOTICE & ~E_WARNING" >> /usr/local/etc/php/php.ini
+
 RUN a2enmod rewrite && \
     sed -i '/<Directory \/var\/www\/>/,/<\/Directory>/ s/AllowOverride None/AllowOverride All/' /etc/apache2/apache2.conf
 
