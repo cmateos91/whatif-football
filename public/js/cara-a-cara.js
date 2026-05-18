@@ -278,7 +278,7 @@ $(document).ready(function () {
         html += '<button id="btn-rejugar" class="btn btn-outline-dark me-2"><i class="bi bi-arrow-clockwise me-1"></i>Volver a jugar</button>';
         html += '<button id="btn-ver-ranking" class="btn btn-dark"><i class="bi bi-trophy me-1"></i>Ver ranking</button>';
         html += '</div>';
-        html += '<div id="ranking-container" class="mt-3"></div>';
+        html += '<div id="ranking-container" class="mt-3 d-none"></div>';
 
         $('#inf-par').append(html);
 
@@ -322,7 +322,14 @@ $(document).ready(function () {
     });
 
     $(document).on('click', '#btn-ver-ranking', function () {
-        $('html, body').animate({ scrollTop: $('#ranking-container').offset().top - 20 }, 400);
+        var $r = $('#ranking-container');
+        $r.toggleClass('d-none');
+        if (!$r.hasClass('d-none')) {
+            $(this).html('<i class="bi bi-trophy me-1"></i>Ocultar ranking');
+            $('html, body').animate({ scrollTop: $r.offset().top - 20 }, 300);
+        } else {
+            $(this).html('<i class="bi bi-trophy me-1"></i>Ver ranking');
+        }
     });
 
     function cargarClasificacion() {
