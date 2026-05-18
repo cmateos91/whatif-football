@@ -348,7 +348,8 @@ $(document).ready(function () {
                 $.each(res.clasificacion, function (i, p) {
                     var m = Math.floor(p.tiempo_segundos / 60), s = p.tiempo_segundos % 60;
                     var t = (m < 10 ? '0' : '') + m + ':' + (s < 10 ? '0' : '') + s;
-                    var esYo = (p.nombre === $('#input-nombre').val().trim() && i === 0);
+                    var $inputNombre = $('#input-nombre');
+                    var esYo = i === 0 && $inputNombre.length && p.nombre === $inputNombre.val().trim();
                     html += '<tr' + (esYo ? ' class="table-warning fw-bold"' : '') + '>';
                     html += '<td>' + (i + 1) + '</td>';
                     html += '<td>' + p.nombre + '</td>';
