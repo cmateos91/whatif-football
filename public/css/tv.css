@@ -1,0 +1,110 @@
+/* ── Escalado para TVs 4K y pantallas grandes ──
+   Bootstrap 5 usa rem extensivamente, así que escalar el font-size
+   raíz agranda automáticamente la mayoría de componentes. */
+
+@media (min-width: 2560px) {
+    html {
+        font-size: 28px;
+    }
+
+    .container {
+        max-width: 2000px;
+    }
+
+    .navbar {
+        padding-top: 1rem;
+        padding-bottom: 1rem;
+    }
+
+    .navbar-brand {
+        font-size: 1.8rem;
+    }
+
+    .navbar-nav .nav-link {
+        font-size: 1.2rem;
+    }
+
+    .card {
+        border-radius: 1rem;
+    }
+
+    .card-header {
+        padding: 1.2rem 2rem;
+    }
+
+    .card-body {
+        padding: 2.5rem;
+    }
+
+    .form-select,
+    .form-control {
+        padding: 0.8rem 1.2rem;
+        border-radius: 0.6rem;
+    }
+
+    .btn {
+        padding: 0.7rem 1.8rem;
+        border-radius: 0.6rem;
+    }
+
+    .btn-lg {
+        padding: 1rem 2.5rem;
+        border-radius: 0.8rem;
+        font-size: 1.3rem;
+    }
+
+    .badge {
+        font-size: 1rem;
+        padding: 0.5rem 1rem;
+    }
+
+    .nav-tabs .nav-link {
+        padding: 1rem 2rem;
+        font-size: 1.15rem;
+    }
+
+    table {
+        font-size: 1.05rem;
+    }
+
+    .table td,
+    .table th {
+        padding: 1rem 1.2rem;
+    }
+
+    .autocomplete-item {
+        padding: 1rem 1.2rem;
+        font-size: 1.05rem;
+    }
+
+    #autocomplete-list,
+    .autocomplete-list {
+        max-height: 400px;
+    }
+
+    .shadow-sm {
+        box-shadow: 0 0.5rem 1.5rem rgba(0, 0, 0, 0.12) !important;
+    }
+
+    .mb-4 {
+        margin-bottom: 2.5rem !important;
+    }
+
+    .g-3 {
+        --bs-gutter-x: 2rem;
+    }
+
+    .g-4 {
+        --bs-gutter-x: 2.5rem;
+    }
+
+    .fs-3 {
+        font-size: 2.2rem !important;
+    }
+}
+
+@media (min-width: 3840px) {
+    .container {
+        max-width: 2800px;
+    }
+}
